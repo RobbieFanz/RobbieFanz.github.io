@@ -1,30 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Contacts } from './components/contacts'
+import Silk from './components/silk'
+import { FaHome, FaInfo, FaFolderOpen } from "react-icons/fa";
+import GlassIcons from './components/glassicons'
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import { AboutMe } from './components/aboutMe'
+import { Projects } from './components/projects'
+import { RedirectToHome } from './components/redirectHomeComp';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const items = [
+    {
+      label: "Home",
+      icon: <FaHome />,
+      color: "clear",
+      to: "/"
+    },
+    {
+      label: "About Me",
+      icon: <FaInfo />,
+      color: "clear",
+      to: "/about"
+    },
+    {
+      label: "Projects",
+      icon: <FaFolderOpen />,
+      color: "clear",
+      to: "/projects"
+    },
+];
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Initial commit
-        </p>
-      </div>
+      <HashRouter>
+      
+          <div className="fixed inset-0 z-0 flex-grow overflow-y-auto xs:visible invisible ">
+            <Silk
+              speed={3}
+              scale={0.85}
+              color="#4954bd" //4954bd, de7639, 6c0000
+              noiseIntensity={0.1}
+              rotation={2.78}
+            />
+          </div>
+          <div className='relative z-20 flex flex-col items-center'>
+            <div className='absolute z-20'>
+              <GlassIcons items={items} className='grid xs:gap-[5em] grid-cols-3 py-[3em] overflow-visible relative'/>
+            </div>
+            
+            <div>
+              <Routes>
+                <Route path='/' element={<Contacts/>}/>
+                <Route path='/about' element={<AboutMe/>}/>
+                <Route path='projects' element={<Projects/>}/>
+                <Route path='*' element={<RedirectToHome/>}/>
+              </Routes>
+            </div>
+          </div>
+      </HashRouter>
     </>
   )
 }
