@@ -1,0 +1,24 @@
+<svg width="1024" height="1024" viewBox="0 0 700 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient for futuristic glow -->
+    <linearGradient id="futuristicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7f00ff"/>
+      <stop offset="100%" stop-color="#00bfff"/>
+    </linearGradient>
+    <!-- Outer glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Futuristic text (R F only) -->
+  <text x="50%" y="68%" text-anchor="middle" dominant-baseline="middle"
+        font-family="Orbitron, sans-serif" font-size="750" font-weight="800"
+        fill="url(#futuristicGradient)" filter="url(#glow)" letter-spacing="5">
+    RF
+  </text>
+</svg>
