@@ -1,24 +1,16 @@
-<svg width="1024" height="1024" viewBox="0 0 700 1024" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">RF monogram</title>
   <defs>
-    <!-- Gradient for futuristic glow -->
-    <linearGradient id="futuristicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7f00ff"/>
-      <stop offset="100%" stop-color="#00bfff"/>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#252c60"/>
+      <stop offset="1" stop-color="#10142e"/>
     </linearGradient>
-    <!-- Outer glow effect -->
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
+    <linearGradient id="monogram" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f2f1ff"/>
+      <stop offset="0.55" stop-color="#b6bcff"/>
+      <stop offset="1" stop-color="#71d5ed"/>
+    </linearGradient>
   </defs>
-
-  <!-- Futuristic text (R F only) -->
-  <text x="50%" y="68%" text-anchor="middle" dominant-baseline="middle"
-        font-family="Orbitron, sans-serif" font-size="750" font-weight="800"
-        fill="url(#futuristicGradient)" filter="url(#glow)" letter-spacing="5">
-    RF
-  </text>
+  <rect x="3" y="3" width="122" height="122" rx="28" fill="url(#background)" stroke="#858ef5" stroke-width="2"/>
+  <path fill="url(#monogram)" fill-rule="evenodd" transform="translate(0 4)" d="M25 29h21c12 0 19 7 19 18 0 8-4 14-11 17l13 27H54L43 66h-6v25H25V29zm12 11v15h8c5 0 8-3 8-8s-3-7-8-7h-8zM73 29h32v11H85v15h18v11H85v25H73V29z"/>
 </svg>
