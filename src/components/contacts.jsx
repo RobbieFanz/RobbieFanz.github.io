@@ -4,7 +4,7 @@ import emailsvg from '/email.svg'
 
 export function Contacts(){
     return(
-        <div className="relative z-10 flex h-screen w-full">
+        <div className="home-page relative z-10 flex w-full">
                 <div className="flex flex-col items-center justify-center md:gap-3 lg:gap-6 px-4 text-center">
                     <h1 className="text-4xl md:text-7xl lg:text-9xl font-bold tracking-tighter">
                         Welcome

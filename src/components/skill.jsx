@@ -6,7 +6,7 @@ export function Skill({items, name, cols}){
         <div className={"grid gap-2 justify-items-center "+cols}>
             {items.map((item, index) => (
                 <div key={index} className="text-lg md:text-xl lg:text-2xl tracking-tighter text-right flex col-span-1 items-center">
-                {item.label}<img src={item.svg} className="w-7 xs:w-10 ml-1"/>
+                {item.label}<img src={item.svg} className={`${item.iconClassName || 'w-7 xs:w-10'} ml-1`}/>
                 </div>
             ))}
             

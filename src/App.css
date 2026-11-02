@@ -2,6 +2,13 @@
 
 @theme {  --breakpoint-xs: 31rem;
           --breakpoint-wl: 104rem;
+          --breakpoint-lp: 24rem;
+}
+
+.home-page {
+  min-height: 100vh;
+  /* Match the navigation's 4.5em icons and 3em vertical padding. */
+  padding-block: 10.5em;
 }
 
 .page {

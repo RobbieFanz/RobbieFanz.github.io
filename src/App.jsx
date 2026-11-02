@@ -46,7 +46,7 @@ function App() {
           </div>
           <div className='relative z-20 flex flex-col items-center'>
             <div className='absolute z-20'>
-              <GlassIcons items={items} className='grid xs:gap-[5em] grid-cols-3 py-[3em] overflow-visible relative'/>
+              <GlassIcons items={items} className='grid lp:gap-[3em] xs:gap-[5em] grid-cols-3 py-[3em] overflow-visible relative'/>
             </div>
             
             <div>
