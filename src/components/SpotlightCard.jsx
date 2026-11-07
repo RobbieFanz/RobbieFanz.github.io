@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 
-const SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 255, 255, 0.25)' }) => {
+const SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 255, 255, 0.25)', href }) => {
   const divRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
+  const CardElement = href ? 'a' : 'div';
 
   const handleMouseMove = e => {
     if (!divRef.current || isFocused) return;
@@ -32,14 +33,17 @@ const SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 2
   };
 
   return (
-    <div
+    <CardElement
       ref={divRef}
+      href={href || undefined}
+      target={href ? '_blank' : undefined}
+      rel={href ? 'noopener noreferrer' : undefined}
       onMouseMove={handleMouseMove}
       onFocus={handleFocus}
       onBlur={handleBlur}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative rounded-xl xs:rounded-3xl border border-[#d3d3d337] bg-[#49494986] overflow-hidden p-3 xs:p-8 ${className}`}
+      className={`relative rounded-xl xs:rounded-3xl border border-[#d3d3d337] bg-[#49494986] overflow-hidden p-3 xs:p-8 ${href ? 'cursor-pointer text-inherit font-normal hover:text-inherit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' : ''} ${className}`}
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out"
@@ -49,7 +53,7 @@ const SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 2
         }}
       />
       {children}
-    </div>
+    </CardElement>
   );
 };
 
