@@ -10,7 +10,7 @@ export function Projects(){
     const projects=[
     {
         title:"Article Sums",
-        text:"Articles Sums is a project",
+        text:"Articles Sums is a project that I created to automatically summarize articles using Python and Ollama. I developed this project as a way to stay up to date on current matters in the technical world. First the Articles are fetched from Hacker News then they are checked against the SQLite database, any articles that have already been seen are filtered out. The remaining are added to the Database and sent to a local Ollama model for a relevance evaluation. The Ollama model then decides based on a relevance criteria text if the article should be in the final email. Then the article will get summarized by the model. Longer articles are divided into smaller chunks, each of which is summarized individually. These summaries are then combined to generate the final output for that article. Finally the model will create a rank out of 10 for how important the article is, then the articles get ordered based on rank and the email is sent via SMTP. In this project I learned how to manage small context windows, local Ollama model interactions, and SMTP email automation.",
         imgsrc:articleSums,
         link:"https://github.com/RobbieFanz/Article-Sums",
         technologies: [
@@ -38,11 +38,11 @@ export function Projects(){
                     </div>
                     <div className="flex w-full min-w-0 flex-col self-stretch">
                         <h1 className="text-4xl xs:text-5xl font-semibold text-center mb-1 xs:mb-2">{item.title}</h1>
-                        <p className="col-span-1 self-center xl:text-lg">
+                        <p className="col-span-1 self-center xl:text-md 2xl:text-lg">
                             {item.text}
                         </p>
                         {item.technologies?.length > 0 && (
-                            <ul aria-label="Technologies used" className="mt-auto flex flex-wrap justify-center gap-y-10 pt-12 xl:justify-start">
+                            <ul aria-label="Technologies used" className="flex flex-wrap justify-center gap-y-10 pt-4 xl:justify-start">
                                 {item.technologies.map((technology) => (
                                     <li key={technology.label} className="flex w-9 xs:w-12 justify-center">
                                         <span

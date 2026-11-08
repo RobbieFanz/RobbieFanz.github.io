@@ -1,7 +1,9 @@
-/* eslint-disable react/no-unknown-property */
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { forwardRef, useRef, useMemo, useLayoutEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { useEffect, useMemo } from 'react';
 import { Color } from 'three';
+
+const FRAME_INTERVAL = 1000 / 30;
+const RENDER_SCALE = 0.75;
 
 const hexToNormalizedRGB = hex => {
   hex = hex.replace('#', '');
@@ -14,24 +16,25 @@ const hexToNormalizedRGB = hex => {
 
 const vertexShader = `
 varying vec2 vUv;
-varying vec3 vPosition;
+
+uniform float uScale;
+uniform float uRotation;
 
 void main() {
-  vPosition = position;
-  vUv = uv;
+  float c = cos(uRotation);
+  float s = sin(uRotation);
+  mat2 rot = mat2(c, -s, s, c);
+  vUv = rot * (uv * uScale) * uScale;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `;
 
 const fragmentShader = `
 varying vec2 vUv;
-varying vec3 vPosition;
 
 uniform float uTime;
 uniform vec3  uColor;
 uniform float uSpeed;
-uniform float uScale;
-uniform float uRotation;
 uniform float uNoiseIntensity;
 
 const float e = 2.71828182845904523536;
@@ -42,17 +45,9 @@ float noise(vec2 texCoord) {
   return fract(r.x * r.y * (1.0 + texCoord.x));
 }
 
-vec2 rotateUvs(vec2 uv, float angle) {
-  float c = cos(angle);
-  float s = sin(angle);
-  mat2  rot = mat2(c, -s, s, c);
-  return rot * uv;
-}
-
 void main() {
   float rnd        = noise(gl_FragCoord.xy);
-  vec2  uv         = rotateUvs(vUv * uScale, uRotation);
-  vec2  tex        = uv * uScale;
+  vec2  tex        = vUv;
   float tOffset    = uSpeed * uTime;
 
   tex.y += 0.03 * sin(8.0 * tex.x - tOffset);
@@ -69,31 +64,57 @@ void main() {
 }
 `;
 
-const SilkPlane = forwardRef(function SilkPlane({ uniforms }, ref) {
-  const { viewport } = useThree();
+const SilkPlane = ({ uniforms }) => {
+  const { gl, invalidate, viewport } = useThree();
 
-  useLayoutEffect(() => {
-    if (ref.current) {
-      ref.current.scale.set(viewport.width, viewport.height, 1);
-    }
-  }, [ref, viewport]);
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let isVisible = false;
+    let timerId = null;
 
-  useFrame((_, delta) => {
-    ref.current.material.uniforms.uTime.value += 0.1 * delta;
-  });
+    const updateAnimation = () => {
+      if (isVisible && !document.hidden && !reducedMotion.matches) {
+        if (timerId !== null) return;
+
+        let lastFrameTime = performance.now();
+        timerId = window.setInterval(() => {
+          const now = performance.now();
+          uniforms.uTime.value += (now - lastFrameTime) / 10000;
+          lastFrameTime = now;
+          invalidate();
+        }, FRAME_INTERVAL);
+      } else if (timerId !== null) {
+        window.clearInterval(timerId);
+        timerId = null;
+      }
+    };
+
+    const observer = new IntersectionObserver(entries => {
+      isVisible = entries[entries.length - 1].isIntersecting;
+      updateAnimation();
+    });
+
+    observer.observe(gl.domElement);
+    document.addEventListener('visibilitychange', updateAnimation);
+    reducedMotion.addEventListener('change', updateAnimation);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', updateAnimation);
+      reducedMotion.removeEventListener('change', updateAnimation);
+      if (timerId !== null) window.clearInterval(timerId);
+    };
+  }, [gl, invalidate, uniforms]);
 
   return (
-    <mesh ref={ref}>
+    <mesh scale={[viewport.width, viewport.height, 1]}>
       <planeGeometry args={[1, 1, 1, 1]} />
       <shaderMaterial uniforms={uniforms} vertexShader={vertexShader} fragmentShader={fragmentShader} />
     </mesh>
   );
-});
-SilkPlane.displayName = 'SilkPlane';
+};
 
 const Silk = ({ speed = 5, scale = 1, color = '#7B7481', noiseIntensity = 1.5, rotation = 0 }) => {
-  const meshRef = useRef();
-
   const uniforms = useMemo(
     () => ({
       uSpeed: { value: speed },
@@ -107,8 +128,12 @@ const Silk = ({ speed = 5, scale = 1, color = '#7B7481', noiseIntensity = 1.5, r
   );
 
   return (
-    <Canvas dpr={[1, 2]} frameloop="always">
-      <SilkPlane ref={meshRef} uniforms={uniforms} />
+    <Canvas
+      dpr={RENDER_SCALE}
+      frameloop="demand"
+      gl={{ antialias: false, alpha: false, powerPreference: 'low-power' }}
+    >
+      <SilkPlane uniforms={uniforms} />
     </Canvas>
   );
 };

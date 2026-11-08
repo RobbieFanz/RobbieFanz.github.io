@@ -35,7 +35,7 @@ function App() {
     <>
       <HashRouter>
       
-          <div className="fixed inset-0 z-0 flex-grow overflow-y-auto xs:visible invisible ">
+          <div className="fixed inset-0 z-0 hidden overflow-y-auto xs:block">
             <Silk
               speed={3}
               scale={0.85}
